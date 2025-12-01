@@ -89,4 +89,175 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Establishment queries
+export async function createEstablishment(
+  userId: number,
+  name: string,
+  description?: string,
+  accessToken?: string
+) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const { establishments } = await import("../drizzle/schema");
+  const token = accessToken || Math.random().toString(36).substring(2, 15);
+
+  const result = await db.insert(establishments).values({
+    userId,
+    name,
+    description,
+    accessToken: token,
+  });
+
+  return token;
+}
+
+export async function getEstablishmentByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const { establishments } = await import("../drizzle/schema");
+  const result = await db
+    .select()
+    .from(establishments)
+    .where(eq(establishments.userId, userId))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function getEstablishmentByAccessToken(accessToken: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const { establishments } = await import("../drizzle/schema");
+  const result = await db
+    .select()
+    .from(establishments)
+    .where(eq(establishments.accessToken, accessToken))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : undefined;
+}
+
+// Product queries
+export async function createProduct(
+  establishmentId: number,
+  name: string,
+  description?: string
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const { products } = await import("../drizzle/schema");
+  const result = await db.insert(products).values({
+    establishmentId,
+    name,
+    description,
+  });
+
+  return result;
+}
+
+export async function getProductsByEstablishment(establishmentId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const { products } = await import("../drizzle/schema");
+  return await db
+    .select()
+    .from(products)
+    .where(eq(products.establishmentId, establishmentId));
+}
+
+// Order queries
+export async function createOrder(
+  establishmentId: number,
+  ticketNumber: string,
+  accessToken?: string
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const { orders } = await import("../drizzle/schema");
+  const token = accessToken || Math.random().toString(36).substring(2, 15);
+
+  const result = await db.insert(orders).values({
+    establishmentId,
+    ticketNumber,
+    accessToken: token,
+    status: "preparing",
+  });
+
+  return token;
+}
+
+export async function getOrdersByEstablishment(establishmentId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const { orders } = await import("../drizzle/schema");
+  return await db
+    .select()
+    .from(orders)
+    .where(eq(orders.establishmentId, establishmentId))
+    .orderBy((t) => t.createdAt);
+}
+
+export async function getOrderByAccessToken(accessToken: string) {
+  const db = await getDb();
+  if (!db) return undefined;
+
+  const { orders } = await import("../drizzle/schema");
+  const result = await db
+    .select()
+    .from(orders)
+    .where(eq(orders.accessToken, accessToken))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : undefined;
+}
+
+export async function updateOrderStatus(
+  orderId: number,
+  status: "preparing" | "ready"
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const { orders } = await import("../drizzle/schema");
+  await db
+    .update(orders)
+    .set({ status })
+    .where(eq(orders.id, orderId));
+}
+
+// OrderItem queries
+export async function addOrderItem(
+  orderId: number,
+  productId: number,
+  quantity: number = 1
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const { orderItems } = await import("../drizzle/schema");
+  await db.insert(orderItems).values({
+    orderId,
+    productId,
+    quantity,
+  });
+}
+
+export async function getOrderItems(orderId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const { orderItems } = await import("../drizzle/schema");
+  return await db
+    .select()
+    .from(orderItems)
+    .where(eq(orderItems.orderId, orderId));
+}
