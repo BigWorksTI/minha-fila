@@ -139,6 +139,23 @@ services:
     networks:
       - traefik
 
+  # Swagger UI para documentação da API (serve docs/openapi/openapi.yaml)
+  swagger:
+    image: swaggerapi/swagger-ui:latest
+    container_name: minhafila_swagger
+    environment:
+      - SWAGGER_JSON=/spec/openapi.yaml
+    volumes:
+      - ./docs/openapi:/spec:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.swagger.rule=Host(`docs.minhafila.vps.bigworks.com.br`)"
+      - "traefik.http.routers.swagger.entrypoints=websecure"
+      - "traefik.http.routers.swagger.tls.certresolver=letsencrypt"
+      - "traefik.http.services.swagger.loadbalancer.server.port=8080"
+    networks:
+      - traefik
+
 volumes:
   pgdata:
   redisdata:
