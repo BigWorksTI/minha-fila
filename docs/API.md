@@ -1,7 +1,7 @@
 # API (MVP Atualizado)
 
 ## Autenticação
-- Login via Google/Apple (OAuth). Unificação por e‑mail (sem duplicar usuário).
+- Login via Google (OAuth) e Magic Link (e‑mail). Unificação por e‑mail (sem duplicar usuário).
 - Tabela de apoio: `user_providers (user_id, provider, provider_id)`.
 - Rotas administrativas exigem token (Sanctum/Bearer).
 
@@ -20,6 +20,16 @@ GET /auth/google/callback
 - Trata o retorno do Google; se o e‑mail existir, vincula/usa o mesmo usuário.
 - Cria/atualiza registro em `user_providers`.
 - Primeiro acesso sem empresa: cria empresa (UUID curto) e redireciona para `/[uuid]/admin`.
+
+### Magic Link (e‑mail)
+POST /auth/magic-link
+Body:
+{ "email": "user@exemplo.com" }
+- Envia e‑mail com link único que expira (ex.: 15 min).
+
+GET /auth/magic-link/verify?token=...&email=...
+- Valida token e autentica o usuário.
+- Se não existir usuário para o e‑mail, cria e segue regra do primeiro acesso (criar empresa e redirecionar).
 
 ### Criar pedido (empresa por UUID curto)
 POST /api/companies/{uuid}/orders

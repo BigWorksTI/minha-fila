@@ -53,7 +53,7 @@ Pacotes recomendados
 - laravel/sanctum (auth por token simples, se necessário)
 - predis/predis ou php-redis (extensão)
 - pusher/pusher-php-server (se for útil para debug)
-- laravel/socialite (Google/Apple OAuth)
+- laravel/socialite (Google OAuth)
 
 Broadcasting
 - `BROADCAST_DRIVER=pusher` no `.env`
@@ -81,5 +81,15 @@ Google OAuth (conceito)
   - `GET /auth/google/redirect`
   - `GET /auth/google/callback`
   - (futuro) logout, refresh token, etc.
+
+Magic Link (conceito)
+- Controller: `MagicLinkController` com métodos:
+  - `send()` → recebe e‑mail, gera token (hash), grava em `magic_links (email, token_hash, expires_at, used_at)` e envia link por e‑mail.
+  - `verify()` → valida token e e‑mail, autentica; se usuário não existir, cria e executa fluxo de primeiro acesso (empresa + redirect).
+- Rotas:
+  - `POST /auth/magic-link`
+  - `GET /auth/magic-link/verify`
+- Configurações:
+  - expiração (ex.: 15 minutos), uso único, invalidação após uso.
 
 

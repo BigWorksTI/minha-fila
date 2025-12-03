@@ -17,6 +17,63 @@ paths:
       summary: Health Check
       tags: [Health]
       responses:
+  /auth/google/redirect:
+    get:
+      summary: OAuth Google redirect
+      tags: [Auth]
+      responses:
+        '302':
+          description: Redirect to Google
+
+  /auth/google/callback:
+    get:
+      summary: OAuth Google callback
+      tags: [Auth]
+      parameters:
+        - in: query
+          name: code
+          schema: { type: string }
+        - in: query
+          name: state
+          schema: { type: string }
+      responses:
+        '302':
+          description: Redirect to admin /[uuid]/admin
+
+  /auth/magic-link:
+    post:
+      summary: Envia magic link por e-mail
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string, format: email }
+              required: [email]
+      responses:
+        '204':
+          description: Link enviado (se e-mail for válido)
+
+  /auth/magic-link/verify:
+    get:
+      summary: Verifica magic link e autentica
+      tags: [Auth]
+      parameters:
+        - in: query
+          name: email
+          schema: { type: string, format: email }
+          required: true
+        - in: query
+          name: token
+          schema: { type: string }
+          required: true
+      responses:
+        '302':
+          description: Redirect para /[uuid]/admin
+
         '200':
           description: OK
           content:

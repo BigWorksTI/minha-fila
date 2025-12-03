@@ -13,9 +13,9 @@ Backend (VPS + Traefik)
 - Orquestração com Docker Compose e reverse proxy com Traefik (TLS ACME)
 
 Autenticação e Identidade
-- Login com Google e Apple (OAuth).
+- Login com Google (OAuth) e Magic Link (e‑mail).
 - Regra de unificação: se o e‑mail coincidir, sempre referenciar o mesmo `user`.
-- Tabela relacional `user_providers (user_id, provider, provider_id, created_at)` para rastrear logins.
+- Tabela relacional `user_providers (user_id, provider, provider_id, created_at)` para rastrear logins (ex.: `provider=google` com `provider_id`, para Magic Link pode registrar `provider=magic`).
 
 Comunicação
 - REST para CRUD e relatórios

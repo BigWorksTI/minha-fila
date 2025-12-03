@@ -24,6 +24,14 @@ Google OAuth (Produção)
    - Acesse `https://minhafila.vps.bigworks.com.br/auth/google/redirect`
    - Deve redirecionar para “accounts.google.com”.
 
+Magic Link (Produção)
+1) Configure SMTP no `.env` (MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_FROM_*).
+2) Defina `MAGIC_LINK_EXPIRE_MINUTES` (ex.: 15).
+3) Reinicie o app: `docker compose restart app`.
+4) Teste:
+   - `POST /auth/magic-link` com `{"email":"seu@email"}`
+   - Abra o link recebido no e‑mail (deve autenticar e redirecionar).
+
 Frontend (Vercel)
 - Conectar repo do frontend, configurar envs (URL da API, etc.)
 - Build padrão do Next.js (Node LTS)
