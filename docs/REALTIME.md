@@ -1,7 +1,7 @@
 # Realtime
 
 Canal
-- `shop.{id}.orders`
+- `company.<uuid>`
 
 Evento
 - `OrderUpdated`
@@ -9,7 +9,7 @@ Evento
 Payload (exemplo)
 {
   "id": 10,
-  "status": "ready",
+  "status": "ready", // waiting | preparing | ready | done
   "sequence_id": 124,
   "updated_at": "2025-01-10 14:33"
 }
@@ -20,6 +20,6 @@ Cliente (Echo)
 
 Servidor (Laravel)
 - Disparar `broadcast(new OrderUpdated($order))` após persistência e atualização de cache
-- Separar canais por estabelecimento para evitar vazamento de eventos
+- Separar canais por empresa (`company.<uuid>`) para evitar vazamento de eventos
 
 

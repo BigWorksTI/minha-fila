@@ -8,6 +8,13 @@ Benefícios
 - Não exige hardware adicional
 - Mobile‑first, leve e responsivo
 
+Diretrizes do MVP (atualizadas)
+- Login por Google ou Apple; unificação de contas por e‑mail (sem duplicar usuário).
+- Primeiro acesso: criar empresa (UUID curto, ex.: `fk29ad`) e redirecionar para `/[uuid]/admin`.
+- Rotas públicas: `/[uuid]` (fila); privadas: `/[uuid]/admin`, `/[uuid]/admin/config`.
+- Status do pedido: `waiting`, `preparing`, `ready`, `done`.
+- Realtime em canal `company.<uuid>` via Soketi.
+
 Público‑alvo (exemplos)
 - Lanchonetes pequenas, carrinhos e food trucks
 - Operações sazonais de praia

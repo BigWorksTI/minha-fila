@@ -12,15 +12,10 @@ Estrutura (prevista)
 src/
   app/
     layout.tsx
-    page.tsx
-    admin/
-      page.tsx
-      orders/
-        page.tsx
-    painel/
-      page.tsx
-    pedido/[id]/
-      page.tsx
+    page.tsx              # login (Google/Apple)
+    [uuid]/page.tsx       # fila pública
+    [uuid]/admin/page.tsx
+    [uuid]/admin/config/page.tsx
   components/
     OrderCard.tsx
     StatusBadge.tsx
@@ -33,8 +28,14 @@ src/
     globals.css
 
 Realtime
-- Conectar Echo ao host do Soketi e assinar `shop.{id}.orders`
+- Conectar Echo ao host do Soketi e assinar `company.<uuid>`
 - Revalidar SWR ao receber `OrderUpdated`
+
+Admin (MVP)
+- Criar pedido (gera `number` sequencial por empresa, descrição opcional).
+- Zerar numeração (reseta `order_sequences`).
+- Alterar status com confirmação (waiting → preparing → ready → done; pode retroceder).
+- Listagens: 1) Prontos (destaque), 2) Fila, 3) Finalizados (colapsados).
 
 Deploy
 - Vercel com variáveis de ambiente (URLs da API e do Soketi, quando necessário)

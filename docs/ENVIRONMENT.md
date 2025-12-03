@@ -48,6 +48,19 @@ MAIL_PASSWORD=
 MAIL_FROM_ADDRESS=""
 MAIL_FROM_NAME="${APP_NAME}"
 
+OAuth (Google/Apple)
+# Google
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+GOOGLE_REDIRECT_URI=${APP_URL}/auth/google/callback
+
+# Apple
+APPLE_CLIENT_ID=
+APPLE_TEAM_ID=
+APPLE_KEY_ID=
+APPLE_PRIVATE_KEY= # conteúdo da chave (ou caminho seguro)
+APPLE_REDIRECT_URI=${APP_URL}/auth/apple/callback
+
 Broadcast (Soketi/Pusher‑compatible)
 BROADCAST_DRIVER=pusher
 PUSHER_APP_ID=2086410
