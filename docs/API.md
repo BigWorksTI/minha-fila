@@ -12,6 +12,15 @@ GET /api/health
 Resposta:
 { "status": "ok" }
 
+### OAuth Google
+GET /auth/google/redirect
+- Redireciona para o Google (302) com scope de e‑mail/perfil.
+
+GET /auth/google/callback
+- Trata o retorno do Google; se o e‑mail existir, vincula/usa o mesmo usuário.
+- Cria/atualiza registro em `user_providers`.
+- Primeiro acesso sem empresa: cria empresa (UUID curto) e redireciona para `/[uuid]/admin`.
+
 ### Criar pedido (empresa por UUID curto)
 POST /api/companies/{uuid}/orders
 Body:

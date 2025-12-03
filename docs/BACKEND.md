@@ -53,6 +53,7 @@ Pacotes recomendados
 - laravel/sanctum (auth por token simples, se necessário)
 - predis/predis ou php-redis (extensão)
 - pusher/pusher-php-server (se for útil para debug)
+- laravel/socialite (Google/Apple OAuth)
 
 Broadcasting
 - `BROADCAST_DRIVER=pusher` no `.env`
@@ -67,5 +68,18 @@ Comandos úteis
 - Gerar key: `php artisan key:generate`
 - Migrações: `php artisan migrate --seed`
 - Testes: `php artisan test`
+
+Google OAuth (conceito)
+- Controller: `AuthController` com métodos:
+  - `googleRedirect()` → retorna `Socialite::driver('google')->redirect()`
+  - `googleCallback()` → recebe `GoogleUser`, unifica por e‑mail:
+    - se `users.email` existir → usa esse `user`
+    - cria/atualiza `user_providers` com `{provider: google, provider_id}`
+    - se usuário não tiver empresa → criar `companies` (UUID curto) e `order_sequences` zerada
+    - retornar/redirect para `/[uuid]/admin`
+- Rotas:
+  - `GET /auth/google/redirect`
+  - `GET /auth/google/callback`
+  - (futuro) logout, refresh token, etc.
 
 

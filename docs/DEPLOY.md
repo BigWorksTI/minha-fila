@@ -9,6 +9,21 @@ Backend (VPS + Traefik)
 6) Migrar DB: `docker compose exec app php artisan migrate --seed`
 7) Verificar logs: `docker compose logs -f --tail=200`
 
+Google OAuth (Produção)
+1) No Google Cloud Console, crie um “OAuth 2.0 Client ID (Web)”
+   - Authorized redirect URI:
+     - `https://minhafila.vps.bigworks.com.br/auth/google/callback`
+     - (Stage) `https://minhafila-stage.vps.bigworks.com.br/auth/google/callback`
+2) No servidor de produção (pasta raiz do projeto), edite `.env`:
+   - `GOOGLE_CLIENT_ID=...`
+   - `GOOGLE_CLIENT_SECRET=...`
+   - `GOOGLE_REDIRECT_URI=${APP_URL}/auth/google/callback`
+3) Reinicie o app:
+   - `docker compose restart app`
+4) Teste:
+   - Acesse `https://minhafila.vps.bigworks.com.br/auth/google/redirect`
+   - Deve redirecionar para “accounts.google.com”.
+
 Frontend (Vercel)
 - Conectar repo do frontend, configurar envs (URL da API, etc.)
 - Build padrão do Next.js (Node LTS)
